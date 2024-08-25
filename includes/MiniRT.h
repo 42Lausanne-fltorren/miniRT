@@ -13,6 +13,8 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 # include "math.h"
+# include "mlx.h"
+# include "libft.h"
 
 typedef struct s_vec3
 {
@@ -23,9 +25,9 @@ typedef struct s_vec3
 
 typedef struct s_color
 {
-	int	r;
-	int	g;
-	int	b;
+	char	r;
+	char	g;
+	char	b;
 }	t_color;
 
 typedef struct s_sphere
@@ -69,8 +71,12 @@ typedef struct s_camera
 
 typedef struct s_intersection
 {
-	int		obj_index;
-	double	distance;
+	struct s_generic_object	*object;
+	double					dist;
+	t_vec3					point;
+	t_vec3					normal;
+	t_vec3					view;
+	t_vec3					light_vec;
 }	t_intersection;
 
 typedef enum e_object_type
@@ -82,9 +88,9 @@ typedef enum e_object_type
 
 typedef enum e_light_type
 {
-	POINT_LIGHT,
-	DIR_LIGHT,
-	AMBIENT_LIGHT
+	POINT,
+	DIRECTIONAL,
+	AMBIENT
 }	t_light_type;
 
 typedef struct s_generic_object
@@ -121,10 +127,17 @@ typedef struct s_generic_light
 
 typedef struct s_scene
 {
-	t_generic_object	*objects;
+	t_generic_object	objects[100];
 	int					objects_count;
-	t_camera			camera;
-	t_generic_light		*lights;
+	t_camera			*camera;
+	t_generic_light		lights[100];
+	int					lights_count;
+	void				*mlx;
+	void				*win;
+	void				*img;
+	int					width;
+	int					height;
+	t_color				sky_color;
 }	t_scene;
 
 t_vec3			vec3(double x, double y, double z);
@@ -132,13 +145,17 @@ t_vec3			vec3_add(t_vec3 v, t_vec3 other);
 t_vec3			vec3_sub(t_vec3 v, t_vec3 other);
 t_vec3			vec3_scalar_mul(t_vec3 v, double m);
 t_vec3			vec3_mul(t_vec3 v, t_vec3 other);
+double			vec3_dot(t_vec3 v, t_vec3 other);
 t_vec3			vec3_normalize(t_vec3 v);
 double			vec3_len(t_vec3 v);
 double			vec3_dist(t_vec3 v, t_vec3 other);
+t_vec3			vec3_rotate(t_vec3 v, t_vec3 rot);
 
 t_color			color(int r, int g, int b);
 t_color			color_add(t_color a, t_color b);
 t_color			color_mul(t_color a, int b);
+
+double			min(double *arr, int n);
 
 t_sphere		sphere_create(t_vec3 pos, double r, t_color color,
 					double specular, double reflective);
@@ -157,11 +174,18 @@ t_vec3			sphere_normal(t_vec3 p, t_generic_object this);
 double			intersect_cylinder(t_vec3 pos, t_vec3 dir,
 					t_generic_object this);
 t_vec3			cylinder_normal(t_vec3 p, t_generic_object this);
-double			intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this);
-t_vec3			plane_normal(t_vec3 p, t_generic_object this);
+double			intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this); // TODO
+t_vec3			plane_normal(t_vec3 p, t_generic_object this); // TODO
 
-t_vec3			canvas_to_viewport(double x, double y, t_camera camera);
+t_vec3			canvas_to_viewport(double x, double y, t_scene *scene);
 t_vec3			reflect_ray(t_vec3 ray, t_vec3 normal);
 t_intersection	compute_intersection(t_vec3 origin, t_vec3 dir,
-					t_vec3 t_limits, t_scene scene);
+					t_vec3 t_limits, t_scene *scene);
+double			compute_lighting(t_intersection inter, t_scene *scene);
+t_color			trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth);
+void			draw_scene(t_scene *scene);
+void			set_pixel(t_scene *scene, int x, int y, t_color color);
+
+void			add_light(t_scene *scene, t_generic_light light);
+void			add_object(t_scene *scene, t_generic_object object);
 #endif

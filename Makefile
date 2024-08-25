@@ -1,33 +1,32 @@
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard src/**/*.c) $(wildcard src/*.c)
 OBJ = $(SRC:.c=.o)
 CC = gcc
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -g
 INCLUDE = -Isrc -lm
 
-MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
-MLX_PATH = ./mlx
-MLX = $(MLX_PATH)/libmlx.a
-INCLUDE += -Imlx
+LIBFT_PATH = libft
+LIBFT = $(LIBFT_PATH)/libft.a
 
 NAME = miniRT
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INCLUDE) $(MLX_FLAGS) $(LIBFT)
-
 $(LIBFT):
 	make -C $(LIBFT_PATH) bonus
 
 $(MLX):
-	make -C $(MLX_PATH)
-	cp $(MLX_PATH)/libmlx.a .
+	cd mlx_linux && ./configure
+
+%.o: %.c
+	$(CC) -Wall -Wextra -Werror -g -I/usr/include -Imlx_linux -O3 -c $< -o $@
+
+$(NAME): $(OBJ) $(LIBFT) $(MLX)
+	$(CC) $(OBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME) $(LIBFT)
 
 clean:
-	$(RM) $(OBJ)
 	make -C $(LIBFT_PATH) clean
-	make -C $(MLX_PATH) clean
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(RM) $(NAME)

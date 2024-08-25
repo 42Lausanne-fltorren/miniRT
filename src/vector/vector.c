@@ -6,11 +6,11 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 16:39:04 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/24 17:57:46 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/25 19:20:26 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MiniRT.h"
+#include "../../includes/MiniRT.h"
 
 t_vec3	vec3(double x, double y, double z)
 {
@@ -60,29 +60,4 @@ t_vec3	vec3_add(t_vec3 v, t_vec3 other)
 	new.y = v.y + other.y;
 	new.z = v.z + other.z;
 	return (new);
-}
-
-double	vec3_len(t_vec3 v)
-{
-	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
-}
-
-t_vec3	vec3_normalize(t_vec3 v)
-{
-	t_vec3	new;
-	double	len;
-
-	len = vec3_len(v);
-	new.x = v.x / len;
-	new.y = v.y / len;
-	new.z = v.z / len;
-	return (new);
-}
-
-double	vec3_dist(t_vec3 v, t_vec3 other)
-{
-	t_vec3	new;
-
-	new = vec3_sub(v, other);
-	return (vec3_len(new));
 }
