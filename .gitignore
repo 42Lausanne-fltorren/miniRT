@@ -1,0 +1,5 @@
+*.o
+miniRT
+libft/libft.a
+libft/libft.so
+a.out
