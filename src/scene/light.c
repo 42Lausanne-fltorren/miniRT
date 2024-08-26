@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:56:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 00:05:12 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:29:23 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,28 @@ static double	compute_shadow(t_intersection inter, t_scene *scene,
 	t_intersection	shadow;
 	double			n_dot_l;
 	t_vec3			r;
+	double			r_dot_v;
+	double			i;
 
+	i = 0.0;
 	shadow = compute_intersection(inter.point, inter.light_vec,
 			vec3(0.001, t_max, 0), scene);
 	if (shadow.object != NULL)
 		return (0.0);
 	n_dot_l = vec3_dot(inter.normal, inter.light_vec);
 	if (n_dot_l > 0)
-		return (light.intensity * n_dot_l / (vec3_len(inter.normal)
-				* vec3_len(inter.light_vec)));
+		i += light.intensity * n_dot_l / (vec3_len(inter.normal)
+				* vec3_len(inter.light_vec));
 	if (inter.object->specular != -1)
 	{
 		r = vec3_scalar_mul(inter.normal, n_dot_l * 2);
 		r = vec3_sub(r, inter.light_vec);
-		if (vec3_dot(r, inter.view) > 0)
-			return (light.intensity * pow(vec3_dot(r, inter.view)
-					/ (vec3_len(r) * vec3_len(inter.view)),
-					inter.object->specular));
+		r_dot_v = vec3_dot(r, inter.view);
+		if (r_dot_v > 0)
+			i += light.intensity * pow(r_dot_v / (vec3_len(r)
+						* vec3_len(inter.view)), inter.object->specular);
 	}
-	return (0.0);
+	return (i);
 }
 
 double	compute_lighting(t_intersection inter, t_scene *scene)

@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:41:49 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 00:03:49 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:45:05 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,20 @@ void	draw_scene(t_scene *scene)
 		while (y <= scene->height / 2)
 		{
 			dir = canvas_to_viewport(x, y, scene);
-			col = trace_ray(scene->camera->pos, dir, scene, 3);
-			set_pixel(scene, scene->width / 2 + x, scene->height / 2 - y, col);
+			col = trace_ray(scene->camera->pos, dir, scene, 5);
+			set_pixel(scene, scene->width / 2 + x, scene->height / 2 - y,
+				color_to_int(col));
 			y++;
 		}
 		x++;
 	}
 }
 
-void	set_pixel(t_scene *scene, int x, int y, t_color color)
+/*	dir = canvas_to_viewport(0, -200, scene);
+	col = trace_ray(scene->camera->pos, dir, scene, 3);
+	ft_printf("r: %d, g: %d, b: %d\n", (int) col.r, (int) col.g, (int) col.b);*/
+
+void	set_pixel(t_scene *scene, int x, int y, int col)
 {
 	int		i;
 	int		bpp;
@@ -68,16 +73,16 @@ void	set_pixel(t_scene *scene, int x, int y, t_color color)
 	i = (x * 4) + (y * size_line);
 	if (endian == 1)
 	{
-		data[i] = 0;
-		data[i + 1] = color.b;
-		data[i + 2] = color.g;
-		data[i + 3] = color.r;
+		data[i] = (col >> 24);
+		data[i + 1] = (col >> 16) & 0xFF;
+		data[i + 2] = (col >> 8) & 0xFF;
+		data[i + 3] = col & 0xFF;
 	}
 	else
 	{
-		data[i] = color.r;
-		data[i + 1] = color.g;
-		data[i + 2] = color.b;
-		data[i + 3] = 0;
+		data[i] = (col) & 0xFF;
+		data[i + 1] = (col >> 8) & 0xFF;
+		data[i + 2] = (col >> 16) & 0xFF;
+		data[i + 3] = (col >> 24);
 	}
 }

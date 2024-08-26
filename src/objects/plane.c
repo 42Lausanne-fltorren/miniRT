@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/25 23:56:58 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 17:42:23 by fltorren         ###   ########.fr       */
+/*   Created: 2024/08/26 18:21:56 by fltorren          #+#    #+#             */
+/*   Updated: 2024/08/26 18:38:21 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/MiniRT.h"
+#include "../../includes/MiniRT.h"
 
-double	min(double *arr, int n)
+double	intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this)
 {
-	double	m;
-	int		i;
+	double	t;
+	t_vec3	vec;
 
-	m = INFINITY;
-	i = 0;
-	while (i < n)
-	{
-		if (arr[i] < m)
-			m = arr[i];
-		i++;
-	}
-	return (m);
+	t = vec3_dot(dir, this.plane.normal_vector);
+	if (fabs(t) < 1e-6)
+		return (INFINITY);
+	vec = vec3_sub(this.pos, pos);
+	t = vec3_dot(vec, this.plane.normal_vector) / t;
+	return (t);
 }
 
-double	min_2(double a, double b)
+t_vec3	plane_normal(t_vec3 p, t_generic_object this)
 {
-	if (a > b)
-		return (b);
-	return (a);
+	(void) p;
+	return (this.plane.normal_vector);
 }

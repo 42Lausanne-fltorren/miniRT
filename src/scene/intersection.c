@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 23:35:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/25 23:58:40 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:28:43 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static double	intersect(t_generic_object obj, t_vec3 origin, t_vec3 dir)
 {
 	if (obj.type == SPHERE)
 		return (intersect_sphere(origin, dir, obj));
-//	else if (obj.type == PLANE)
-//		return (intersect_plane(origin, dir, obj));
+	else if (obj.type == PLANE)
+		return (intersect_plane(origin, dir, obj));
 	else if (obj.type == CYLINDER)
 		return (intersect_cylinder(origin, dir, obj));
 	return (INFINITY);
@@ -49,8 +49,8 @@ static t_vec3	get_normal(t_generic_object obj, t_vec3 point)
 {
 	if (obj.type == SPHERE)
 		return (sphere_normal(point, obj));
-//	else if (obj.type == PLANE)
-//		return (plane_normal(point, obj));
+	else if (obj.type == PLANE)
+		return (plane_normal(point, obj));
 	else if (obj.type == CYLINDER)
 		return (cylinder_normal(point, obj));
 	return (vec3(0, 0, 0));
@@ -70,13 +70,13 @@ t_color	trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth)
 	in.normal = get_normal(*in.object, in.point);
 	in.view = vec3_scalar_mul(dir, -1);
 	i = compute_lighting(in, scene);
-	color = color_mul(in.object->color, (int) i);
+	color = color_mul(in.object->color, i);
 	if (in.object->reflective <= 0 || depth <= 0)
 		return (color);
 	ref_color = trace_ray(in.point,
-			reflect_ray(dir, in.normal), scene, depth - 1);
-	color = color_mul(color, 1 - (int) in.object->reflective);
-	color = color_add(color, color_mul(ref_color, (int) in.object->reflective));
+			reflect_ray(in.view, in.normal), scene, depth - 1);
+	color = color_mul(color, 1 - in.object->reflective);
+	color = color_add(color, color_mul(ref_color, in.object->reflective));
 	return (color);
 }
 

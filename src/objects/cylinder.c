@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:49:21 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/25 20:15:56 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/26 15:18:40 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ double	intersect_cylinder(t_vec3 pos, t_vec3 dir, t_generic_object this)
 
 	new[0] = vec3_rotate(vec3_sub(pos, this.pos), this.cylinder.axis);
 	new[1] = vec3_rotate(dir, this.cylinder.axis);
-	solve_quadratic(new[0], new[1], this, t);
+	solve_quadratic(new[1], new[0], this, t);
 	if (t[0] == INFINITY)
 		return (INFINITY);
 	z[0] = new[0].z + t[0] * new[1].z;
@@ -73,7 +73,7 @@ double	intersect_cylinder(t_vec3 pos, t_vec3 dir, t_generic_object this)
 	t[2] = INFINITY;
 	if (new[1].z != 0)
 		t[2] = compute_caps(new, pos, dir, this);
-	return (min(t, 4));
+	return (min(t, 3));
 }
 
 t_vec3	cylinder_normal(t_vec3 pos, t_generic_object this)

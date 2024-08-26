@@ -25,9 +25,9 @@ typedef struct s_vec3
 
 typedef struct s_color
 {
-	char	r;
-	char	g;
-	char	b;
+	double	r;
+	double	g;
+	double	b;
 }	t_color;
 
 typedef struct s_sphere
@@ -153,9 +153,11 @@ t_vec3			vec3_rotate(t_vec3 v, t_vec3 rot);
 
 t_color			color(int r, int g, int b);
 t_color			color_add(t_color a, t_color b);
-t_color			color_mul(t_color a, int b);
+t_color			color_mul(t_color a, double b);
+int				color_to_int(t_color col);
 
 double			min(double *arr, int n);
+double			min_2(double a, double b);
 
 t_sphere		sphere_create(t_vec3 pos, double r, t_color color,
 					double specular, double reflective);
@@ -184,7 +186,7 @@ t_intersection	compute_intersection(t_vec3 origin, t_vec3 dir,
 double			compute_lighting(t_intersection inter, t_scene *scene);
 t_color			trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth);
 void			draw_scene(t_scene *scene);
-void			set_pixel(t_scene *scene, int x, int y, t_color color);
+void			set_pixel(t_scene *scene, int x, int y, int color);
 
 void			add_light(t_scene *scene, t_generic_light light);
 void			add_object(t_scene *scene, t_generic_object object);
