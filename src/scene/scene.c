@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:41:49 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 15:45:05 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:50:17 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ t_vec3	canvas_to_viewport(double x, double y, t_scene *scene)
 {
 	t_vec3	vp;
 
-	vp.x = x * scene->camera->viewport.x / (double) scene->width;
-	vp.y = y * scene->camera->viewport.y / (double) scene->height;
-	vp.z = scene->camera->fov;
+	vp.x = x * scene->camera.viewport.x / (double) scene->width;
+	vp.y = y * scene->camera.viewport.y / (double) scene->height;
+	vp.z = scene->camera.fov;
 	return (vp);
 }
 
@@ -47,8 +47,8 @@ void	draw_scene(t_scene *scene)
 		y = -scene->height / 2;
 		while (y <= scene->height / 2)
 		{
-			dir = canvas_to_viewport(x, y, scene);
-			col = trace_ray(scene->camera->pos, dir, scene, 5);
+			dir = vec3_rotate(canvas_to_viewport(x, y, scene), scene->camera.dir);
+			col = trace_ray(scene->camera.pos, dir, scene, 5);
 			set_pixel(scene, scene->width / 2 + x, scene->height / 2 - y,
 				color_to_int(col));
 			y++;

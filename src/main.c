@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 18:38:31 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:28:18 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/MiniRT.h"
 
-int	main(void)
+/*int	main(void)
 {
 	t_scene				scene;
 	t_camera			camera;
@@ -58,8 +58,8 @@ int	main(void)
 	o[2].type = SPHERE;
 	o[2].pos = vec3(2, 0, 4);
 	o[2].specular = 500;
-	o[2].reflective = 0.8;
-	o[2].color = color(0, 0, 255);
+	o[2].reflective = 0.75;
+	o[2].color = color(200, 200, 200);
 	o[2].sphere.radius = 1;
 	add_object(&scene, o[2]);
 
@@ -75,17 +75,17 @@ int	main(void)
 	o[4].pos = vec3(0, -1.5, 4);
 	o[4].specular = 500;
 	o[4].reflective = 0.2;
-	o[4].color = color(0, 255, 255);
+	o[4].color = color(255, 255, 0);
 	o[4].cylinder.radius = 1;
 	o[4].cylinder.height = 3;
-	o[4].cylinder.axis = vec3(0.5, 0, 0); // TODO maybe change that uwu
+	o[4].cylinder.axis = vec3_normalize(vec3(1, 0, 0)); // TODO maybe change that uwu
 	add_object(&scene, o[4]);
 
 	o[5].type = PLANE;
 	o[5].pos = vec3(0, -1, 0);
 	o[5].specular = 500;
 	o[5].reflective = 0.2;
-	o[5].color = color(255, 100, 100);
+	o[5].color = color(0, 255, 255);
 	o[5].plane.normal_vector = vec3_normalize(vec3(0, 1, 0));
 	add_object(&scene, o[5]);
 
@@ -95,6 +95,44 @@ int	main(void)
 	scene.img = mlx_new_image(scene.mlx, scene.width, scene.height);
 	draw_scene(&scene);
 	mlx_put_image_to_window(scene.mlx, scene.win, scene.img, 0, 0);
+	mlx_loop(scene.mlx);
+	return (0);
+}
+*/
+
+int	close_hook(t_scene *data)
+{
+	mlx_destroy_window(data->mlx, data->win);
+	exit(0);
+	return (0);
+}
+
+int	key_hook(int keycode, t_scene *data)
+{
+	if (keycode == ESC || keycode == 0xff1b)
+		return (close_hook(data));
+	return (0);
+}
+
+int	main(void)
+{
+	int		fd;
+	t_scene	scene;
+
+	fd = open("scenes/test.rt", O_RDONLY);
+	scene = parse(fd);
+	close(fd);
+	scene.width = 600;
+	scene.height = 600;
+	scene.sky_color = color(50, 50, 50);
+	scene.mlx = mlx_init();
+	scene.win = mlx_new_window(scene.mlx, scene.width, scene.height,
+			"xXMiniRTXx");
+	scene.img = mlx_new_image(scene.mlx, scene.width, scene.height);
+	draw_scene(&scene);
+	mlx_put_image_to_window(scene.mlx, scene.win, scene.img, 0, 0);
+	mlx_key_hook(scene.win, key_hook, &scene);
+	mlx_hook(scene.win, 17, 1L << 19, close_hook, &scene);
 	mlx_loop(scene.mlx);
 	return (0);
 }

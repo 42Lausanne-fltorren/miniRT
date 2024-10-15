@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MiniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/24 17:55:45 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:26:56 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 # include "math.h"
 # include "mlx.h"
 # include "libft.h"
+# include <fcntl.h>
+# include <stdio.h>
+
+# define ESC 0x35
+# define NUM_PLUS 0xffab
+# define NUM_MINUS 0xffad
+# define UP 0x7e
+# define DOWN 0x7d
+# define LEFT 0x7b
+# define RIGHT 0x7c
 
 typedef struct s_vec3
 {
@@ -22,6 +32,11 @@ typedef struct s_vec3
 	double	y;
 	double	z;
 }	t_vec3;
+
+typedef struct s_3x3_matrix
+{
+	double	m[3][3];
+}	t_3x3_matrix;
 
 typedef struct s_color
 {
@@ -115,6 +130,7 @@ typedef struct s_generic_object
 typedef struct s_generic_light
 {
 	double				intensity;
+	t_color				color;
 
 	t_light_type		type;
 	union
@@ -129,7 +145,7 @@ typedef struct s_scene
 {
 	t_generic_object	objects[100];
 	int					objects_count;
-	t_camera			*camera;
+	t_camera			camera;
 	t_generic_light		lights[100];
 	int					lights_count;
 	void				*mlx;
@@ -139,6 +155,17 @@ typedef struct s_scene
 	int					height;
 	t_color				sky_color;
 }	t_scene;
+
+typedef enum e_identifier
+{
+	I_AMBIENT_LIGHT,
+	I_CAMERA,
+	I_POINT_LIGHT,
+	I_SPHERE,
+	I_CYLINDER,
+	I_PLANE,
+	I_NONE
+}	t_identifier;
 
 t_vec3			vec3(double x, double y, double z);
 t_vec3			vec3_add(t_vec3 v, t_vec3 other);
@@ -151,6 +178,9 @@ double			vec3_len(t_vec3 v);
 double			vec3_dist(t_vec3 v, t_vec3 other);
 t_vec3			vec3_rotate(t_vec3 v, t_vec3 rot);
 
+t_vec3			matrix_mul_vec(t_3x3_matrix a, t_vec3 b);
+t_3x3_matrix	rotation_matrix(t_vec3 rot);
+
 t_color			color(int r, int g, int b);
 t_color			color_add(t_color a, t_color b);
 t_color			color_mul(t_color a, double b);
@@ -159,25 +189,13 @@ int				color_to_int(t_color col);
 double			min(double *arr, int n);
 double			min_2(double a, double b);
 
-t_sphere		sphere_create(t_vec3 pos, double r, t_color color,
-					double specular, double reflective);
-t_cylinder		cylinder_create(t_vec3 pos, t_vec3 axis, double r, double h,
-					t_color color, double specular,
-					double reflective);
-t_plane			plane_create(t_vec3 pos, t_vec3 normal_vector, t_color color,
-					double specular, double reflective);
-t_camera		camera_create(t_vec3 pos, t_vec3 dir);
-t_point_light	point_light_create(t_vec3 pos, double intensity);
-t_dir_light		dir_light_create(t_vec3 dir, double intensity);
-t_ambient_light	ambient_light_create(double intensity);
-
 double			intersect_sphere(t_vec3 pos, t_vec3 dir, t_generic_object this);
 t_vec3			sphere_normal(t_vec3 p, t_generic_object this);
 double			intersect_cylinder(t_vec3 pos, t_vec3 dir,
 					t_generic_object this);
 t_vec3			cylinder_normal(t_vec3 p, t_generic_object this);
-double			intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this); // TODO
-t_vec3			plane_normal(t_vec3 p, t_generic_object this); // TODO
+double			intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this);
+t_vec3			plane_normal(t_vec3 p, t_generic_object this);
 
 t_vec3			canvas_to_viewport(double x, double y, t_scene *scene);
 t_vec3			reflect_ray(t_vec3 ray, t_vec3 normal);
@@ -190,4 +208,19 @@ void			set_pixel(t_scene *scene, int x, int y, int color);
 
 void			add_light(t_scene *scene, t_generic_light light);
 void			add_object(t_scene *scene, t_generic_object object);
+
+t_scene			parse(int fd);
+t_generic_light	parse_ambient_light(char *line, int *i);
+t_generic_light	parse_point_light(char *line, int *i);
+t_generic_object	parse_sphere(char *line, int *i);
+t_generic_object	parse_plane(char *line, int *i);
+t_generic_object	parse_cylinder(char *line, int *i);
+t_camera		parse_camera(char *line, int *i);
+
+
+t_identifier	get_identifier(char *line, int *i);
+double			get_double(char *line, int *i);
+t_color			get_color(char *line, int *i);
+t_vec3			get_vec3(char *line, int *i);
+int				get_int(char *line, int *i);
 #endif

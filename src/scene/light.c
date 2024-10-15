@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:56:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 15:29:23 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:46:17 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,21 @@ static double	compute_shadow(t_intersection inter, t_scene *scene,
 	return (i);
 }
 
+static void	compute_not_ambient(t_intersection *inter, t_generic_light light,
+double *t_max)
+{
+	if (light.type == POINT)
+	{
+		inter->light_vec = vec3_sub(light.point_light.pos, inter->point);
+		*t_max = 1;
+	}
+	else
+	{
+		inter->light_vec = light.dir_light.dir;
+		*t_max = INFINITY;
+	}
+}
+
 double	compute_lighting(t_intersection inter, t_scene *scene)
 {
 	double	i;
@@ -56,17 +71,7 @@ double	compute_lighting(t_intersection inter, t_scene *scene)
 			i += scene->lights[j].intensity;
 		else
 		{
-			if (scene->lights[j].type == POINT)
-			{
-				inter.light_vec = vec3_sub(scene->lights[j].point_light.pos,
-						inter.point);
-				t_max = 1;
-			}
-			else
-			{
-				inter.light_vec = scene->lights[j].dir_light.dir;
-				t_max = INFINITY;
-			}
+			compute_not_ambient(&inter, scene->lights[j], &t_max);
 			i += compute_shadow(inter, scene, t_max, scene->lights[j]);
 		}
 	}
