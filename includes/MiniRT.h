@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/15 12:48:36 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:57:23 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,60 +167,62 @@ typedef enum e_identifier
 	I_NONE
 }	t_identifier;
 
-t_vec3			vec3(double x, double y, double z);
-t_vec3			vec3_add(t_vec3 v, t_vec3 other);
-t_vec3			vec3_sub(t_vec3 v, t_vec3 other);
-t_vec3			vec3_scalar_mul(t_vec3 v, double m);
-t_vec3			vec3_mul(t_vec3 v, t_vec3 other);
-double			vec3_dot(t_vec3 v, t_vec3 other);
-t_vec3			vec3_normalize(t_vec3 v);
-double			vec3_len(t_vec3 v);
-double			vec3_dist(t_vec3 v, t_vec3 other);
-t_vec3			vec3_rotate(t_vec3 v, t_vec3 rot);
+t_vec3				vec3(double x, double y, double z);
+t_vec3				vec3_add(t_vec3 v, t_vec3 other);
+t_vec3				vec3_sub(t_vec3 v, t_vec3 other);
+t_vec3				vec3_scalar_mul(t_vec3 v, double m);
+t_vec3				vec3_mul(t_vec3 v, t_vec3 other);
+double				vec3_dot(t_vec3 v, t_vec3 other);
+t_vec3				vec3_normalize(t_vec3 v);
+double				vec3_len(t_vec3 v);
+double				vec3_dist(t_vec3 v, t_vec3 other);
+t_vec3				vec3_rotate(t_vec3 v, t_vec3 rot);
 
-t_vec3			matrix_mul_vec(t_3x3_matrix a, t_vec3 b);
-t_3x3_matrix	rotation_matrix(t_vec3 rot);
+t_vec3				matrix_mul_vec(t_3x3_matrix a, t_vec3 b);
+t_3x3_matrix		rotation_matrix(t_vec3 rot);
 
-t_color			color(int r, int g, int b);
-t_color			color_add(t_color a, t_color b);
-t_color			color_mul(t_color a, double b);
-int				color_to_int(t_color col);
+t_color				color(int r, int g, int b);
+t_color				color_add(t_color a, t_color b);
+t_color				color_mul(t_color a, double b);
+int					color_to_int(t_color col);
 
-double			min(double *arr, int n);
-double			min_2(double a, double b);
+double				min(double *arr, int n);
+double				min_2(double a, double b);
 
-double			intersect_sphere(t_vec3 pos, t_vec3 dir, t_generic_object this);
-t_vec3			sphere_normal(t_vec3 p, t_generic_object this);
-double			intersect_cylinder(t_vec3 pos, t_vec3 dir,
-					t_generic_object this);
-t_vec3			cylinder_normal(t_vec3 p, t_generic_object this);
-double			intersect_plane(t_vec3 pos, t_vec3 dir, t_generic_object this);
-t_vec3			plane_normal(t_vec3 p, t_generic_object this);
+double				intersect_sphere(t_vec3 pos, t_vec3 dir,
+						t_generic_object this);
+t_vec3				sphere_normal(t_vec3 p, t_generic_object this);
+double				intersect_cylinder(t_vec3 pos, t_vec3 dir,
+						t_generic_object this);
+t_vec3				cylinder_normal(t_vec3 p, t_generic_object this);
+double				intersect_plane(t_vec3 pos, t_vec3 dir,
+						t_generic_object this);
+t_vec3				plane_normal(t_vec3 p, t_generic_object this);
 
-t_vec3			canvas_to_viewport(double x, double y, t_scene *scene);
-t_vec3			reflect_ray(t_vec3 ray, t_vec3 normal);
-t_intersection	compute_intersection(t_vec3 origin, t_vec3 dir,
-					t_vec3 t_limits, t_scene *scene);
-t_color			compute_lighting(t_intersection inter, t_scene *scene);
-t_color			trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth);
-void			draw_scene(t_scene *scene);
-void			set_pixel(t_scene *scene, int x, int y, int color);
+t_vec3				canvas_to_viewport(double x, double y, t_scene *scene);
+t_vec3				reflect_ray(t_vec3 ray, t_vec3 normal);
+t_intersection		compute_intersection(t_vec3 origin, t_vec3 dir,
+						t_vec3 t_limits, t_scene *scene);
+t_color				compute_lighting(t_intersection inter, t_scene *scene);
+t_color				trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene,
+						int depth);
+void				draw_scene(t_scene *scene);
+void				set_pixel(t_scene *scene, int x, int y, int color);
 
-void			add_light(t_scene *scene, t_generic_light light);
-void			add_object(t_scene *scene, t_generic_object object);
+void				add_light(t_scene *scene, t_generic_light light);
+void				add_object(t_scene *scene, t_generic_object object);
 
-int				parse(int fd, t_scene *scene);
-t_generic_light	parse_ambient_light(char *line, int *i);
-t_generic_light	parse_point_light(char *line, int *i);
+int					parse(int fd, t_scene *scene);
+t_generic_light		parse_ambient_light(char *line, int *i);
+t_generic_light		parse_point_light(char *line, int *i);
 t_generic_object	parse_sphere(char *line, int *i);
 t_generic_object	parse_plane(char *line, int *i);
 t_generic_object	parse_cylinder(char *line, int *i);
-t_camera		parse_camera(char *line, int *i);
+t_camera			parse_camera(char *line, int *i);
 
-
-t_identifier	get_identifier(char *line, int *i);
-double			get_double(char *line, int *i);
-t_color			get_color(char *line, int *i);
-t_vec3			get_vec3(char *line, int *i);
-int				get_int(char *line, int *i);
+t_identifier		get_identifier(char *line, int *i);
+double				get_double(char *line, int *i);
+t_color				get_color(char *line, int *i);
+t_vec3				get_vec3(char *line, int *i);
+int					get_int(char *line, int *i);
 #endif
