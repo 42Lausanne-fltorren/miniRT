@@ -6,42 +6,39 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:24:17 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/11 14:58:10 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:48:49 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/MiniRT.h"
 
-t_scene	parse(int fd)
+int	parse(int fd, t_scene *scene)
 {
-	t_scene			scene;
 	char			*line;
 	int				i;
 	t_identifier	identifier;
 
-	scene.objects_count = 0;
-	scene.lights_count = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
 		identifier = get_identifier(line, &i);
 		if (identifier == I_AMBIENT_LIGHT)
-			add_light(&scene, parse_ambient_light(line, &i));
+			add_light(scene, parse_ambient_light(line, &i));
 		else if (identifier == I_CAMERA)
-			scene.camera = parse_camera(line, &i);
+			scene->camera = parse_camera(line, &i);
 		else if (identifier == I_POINT_LIGHT)
-			add_light(&scene, parse_point_light(line, &i));
+			add_light(scene, parse_point_light(line, &i));
 		else if (identifier == I_SPHERE)
-			add_object(&scene, parse_sphere(line, &i));
+			add_object(scene, parse_sphere(line, &i));
 		else if (identifier == I_PLANE)
-			add_object(&scene, parse_plane(line, &i));
+			add_object(scene, parse_plane(line, &i));
 		else if (identifier == I_CYLINDER)
-			add_object(&scene, parse_cylinder(line, &i));
+			add_object(scene, parse_cylinder(line, &i));
 		free(line);
 		line = get_next_line(fd);
 	}
 	free(line);
-	return (scene);
+	return (0);
 }
 
 t_camera	parse_camera(char *line, int *i)

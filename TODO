@@ -1,6 +1,6 @@
 (x) Handle ESC
 (x) Handle red cross
-() Handle ./miniRT <scene>.rt
+(x) Handle ./miniRT <scene>.rt
 (x) Parser
-() Handle RGB lights
-() Handle FOV
+(x) Handle RGB lights
+(x) Handle FOV

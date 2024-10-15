@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/15 12:26:56 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:48:36 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ t_vec3			canvas_to_viewport(double x, double y, t_scene *scene);
 t_vec3			reflect_ray(t_vec3 ray, t_vec3 normal);
 t_intersection	compute_intersection(t_vec3 origin, t_vec3 dir,
 					t_vec3 t_limits, t_scene *scene);
-double			compute_lighting(t_intersection inter, t_scene *scene);
+t_color			compute_lighting(t_intersection inter, t_scene *scene);
 t_color			trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth);
 void			draw_scene(t_scene *scene);
 void			set_pixel(t_scene *scene, int x, int y, int color);
@@ -209,7 +209,7 @@ void			set_pixel(t_scene *scene, int x, int y, int color);
 void			add_light(t_scene *scene, t_generic_light light);
 void			add_object(t_scene *scene, t_generic_object object);
 
-t_scene			parse(int fd);
+int				parse(int fd, t_scene *scene);
 t_generic_light	parse_ambient_light(char *line, int *i);
 t_generic_light	parse_point_light(char *line, int *i);
 t_generic_object	parse_sphere(char *line, int *i);

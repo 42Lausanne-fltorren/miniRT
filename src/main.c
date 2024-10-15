@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/15 12:28:18 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:50:18 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,35 @@ int	key_hook(int keycode, t_scene *data)
 	return (0);
 }
 
-int	main(void)
+void	init_scene(t_scene *scene)
+{
+	scene->width = 600;
+	scene->height = 600;
+	scene->objects_count = 0;
+	scene->lights_count = 0;
+	scene->sky_color = color(50, 50, 50);
+}
+
+int	ft_error()
+{
+	printf("Error\n");
+	return (1);
+}
+
+int	main(int argc, char **argv)
 {
 	int		fd;
 	t_scene	scene;
 
-	fd = open("scenes/test.rt", O_RDONLY);
-	scene = parse(fd);
+	if (argc != 2)
+		return (ft_error());
+	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+		return (ft_error());
+	init_scene(&scene);
+	if (parse(fd, &scene) < 0)
+		return (ft_error());
 	close(fd);
-	scene.width = 600;
-	scene.height = 600;
-	scene.sky_color = color(50, 50, 50);
 	scene.mlx = mlx_init();
 	scene.win = mlx_new_window(scene.mlx, scene.width, scene.height,
 			"xXMiniRTXx");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 23:35:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/26 18:28:43 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:43:03 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_vec3	get_normal(t_generic_object obj, t_vec3 point)
 t_color	trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth)
 {
 	t_intersection	in;
-	double			i;
+	t_color			i;
 	t_color			color;
 	t_color			ref_color;
 
@@ -70,7 +70,9 @@ t_color	trace_ray(t_vec3 origin, t_vec3 dir, t_scene *scene, int depth)
 	in.normal = get_normal(*in.object, in.point);
 	in.view = vec3_scalar_mul(dir, -1);
 	i = compute_lighting(in, scene);
-	color = color_mul(in.object->color, i);
+	color.r = i.r / 255.0 * in.object->color.r;
+	color.g = i.g / 255.0 * in.object->color.g;
+	color.b = i.b / 255.0 * in.object->color.b;
 	if (in.object->reflective <= 0 || depth <= 0)
 		return (color);
 	ref_color = trace_ray(in.point,

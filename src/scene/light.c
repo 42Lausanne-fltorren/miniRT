@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:56:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/08/27 18:46:17 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:36:07 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/MiniRT.h"
 
-static double	compute_shadow(t_intersection inter, t_scene *scene,
+static t_color	compute_shadow(t_intersection inter, t_scene *scene,
 								double t_max, t_generic_light light)
 {
 	t_intersection	shadow;
 	double			n_dot_l;
 	t_vec3			r;
 	double			r_dot_v;
-	double			i;
+	t_color			i;
 
-	i = 0.0;
+	i = color(0, 0, 0);
 	shadow = compute_intersection(inter.point, inter.light_vec,
 			vec3(0.001, t_max, 0), scene);
 	if (shadow.object != NULL)
-		return (0.0);
+		return (i);
 	n_dot_l = vec3_dot(inter.normal, inter.light_vec);
 	if (n_dot_l > 0)
-		i += light.intensity * n_dot_l / (vec3_len(inter.normal)
-				* vec3_len(inter.light_vec));
+		i = color_add(i, color_mul(light.color, light.intensity * n_dot_l / (vec3_len(inter.normal)
+					* vec3_len(inter.light_vec))));
 	if (inter.object->specular != -1)
 	{
 		r = vec3_scalar_mul(inter.normal, n_dot_l * 2);
 		r = vec3_sub(r, inter.light_vec);
 		r_dot_v = vec3_dot(r, inter.view);
 		if (r_dot_v > 0)
-			i += light.intensity * pow(r_dot_v / (vec3_len(r)
-						* vec3_len(inter.view)), inter.object->specular);
+			i = color_add(i, color_mul(light.color, light.intensity * pow(r_dot_v / (vec3_len(r)
+							* vec3_len(inter.view)), inter.object->specular)));
 	}
 	return (i);
 }
@@ -57,22 +57,25 @@ double *t_max)
 	}
 }
 
-double	compute_lighting(t_intersection inter, t_scene *scene)
+t_color	compute_lighting(t_intersection inter, t_scene *scene)
 {
-	double	i;
-	int		j;
-	double	t_max;
+	t_color			i;
+	int				j;
+	double			t_max;
+	t_generic_light	light;
 
-	i = 0.0;
+	i = color(0, 0, 0);
 	j = -1;
 	while (++j < scene->lights_count)
 	{
-		if (scene->lights[j].type == AMBIENT)
-			i += scene->lights[j].intensity;
+		light = scene->lights[j];
+		if (light.type == AMBIENT)
+			i = color_add(i, color_mul(light.color, light.intensity));
 		else
 		{
 			compute_not_ambient(&inter, scene->lights[j], &t_max);
-			i += compute_shadow(inter, scene, t_max, scene->lights[j]);
+			i = color_add(i, compute_shadow(inter, scene,
+						t_max, scene->lights[j]));
 		}
 	}
 	return (i);
