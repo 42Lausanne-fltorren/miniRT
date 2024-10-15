@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 22:56:11 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/15 12:36:07 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:55:29 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_color	compute_shadow(t_intersection inter, t_scene *scene,
 								double t_max, t_generic_light light)
 {
 	t_intersection	shadow;
-	double			n_dot_l;
+	double			ndl;
 	t_vec3			r;
 	double			r_dot_v;
 	t_color			i;
@@ -26,18 +26,18 @@ static t_color	compute_shadow(t_intersection inter, t_scene *scene,
 			vec3(0.001, t_max, 0), scene);
 	if (shadow.object != NULL)
 		return (i);
-	n_dot_l = vec3_dot(inter.normal, inter.light_vec);
-	if (n_dot_l > 0)
-		i = color_add(i, color_mul(light.color, light.intensity * n_dot_l / (vec3_len(inter.normal)
-					* vec3_len(inter.light_vec))));
+	ndl = vec3_dot(inter.normal, inter.light_vec);
+	if (ndl > 0)
+		i = color_add(i, color_mul(light.color, light.intensity * ndl
+					/ (vec3_len(inter.normal) * vec3_len(inter.light_vec))));
 	if (inter.object->specular != -1)
 	{
-		r = vec3_scalar_mul(inter.normal, n_dot_l * 2);
-		r = vec3_sub(r, inter.light_vec);
+		r = vec3_sub(vec3_scalar_mul(inter.normal, ndl * 2), inter.light_vec);
 		r_dot_v = vec3_dot(r, inter.view);
 		if (r_dot_v > 0)
-			i = color_add(i, color_mul(light.color, light.intensity * pow(r_dot_v / (vec3_len(r)
-							* vec3_len(inter.view)), inter.object->specular)));
+			i = color_add(i, color_mul(light.color, light.intensity
+						* pow(r_dot_v / (vec3_len(r) * vec3_len(inter.view)),
+							inter.object->specular)));
 	}
 	return (i);
 }
