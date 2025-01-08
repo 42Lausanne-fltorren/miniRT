@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2025/01/08 14:06:45 by fltorren         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:38:11 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,17 +156,6 @@ typedef struct s_scene
 	t_color				sky_color;
 }	t_scene;
 
-typedef enum e_identifier
-{
-	I_AMBIENT_LIGHT,
-	I_CAMERA,
-	I_POINT_LIGHT,
-	I_SPHERE,
-	I_CYLINDER,
-	I_PLANE,
-	I_NONE
-}	t_identifier;
-
 t_vec3				vec3(double x, double y, double z);
 t_vec3				vec3_add(t_vec3 v, t_vec3 other);
 t_vec3				vec3_sub(t_vec3 v, t_vec3 other);
@@ -211,10 +200,4 @@ void				set_pixel(t_scene *scene, int x, int y, int color);
 
 void				add_light(t_scene *scene, t_generic_light light);
 void				add_object(t_scene *scene, t_generic_object object);
-
-t_identifier		get_identifier(char *line, int *i);
-double				get_double(char *line, int *i);
-t_color				get_color(char *line, int *i);
-t_vec3				get_vec3(char *line, int *i);
-int					get_int(char *line, int *i);
 #endif
