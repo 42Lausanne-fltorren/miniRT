@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2025/01/08 14:07:02 by fltorren         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:08:24 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	main(int argc, char **argv)
 	if (fd < 0)
 		return (ft_error());
 	init_scene(&scene);
+	// CALL THE PARSER HERE TO FILL THE SCENE STRUCTURE
 	close(fd);
 	scene.mlx = mlx_init();
 	scene.win = mlx_new_window(scene.mlx, scene.width, scene.height,
