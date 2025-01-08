@@ -24,6 +24,9 @@ $(MLX):
 $(NAME): $(OBJ) $(LIBFT) $(MLX)
 	$(CC) $(OBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME) $(LIBFT)
 
+run: all
+	./$(NAME) scenes/minimal.rt
+
 clean:
 	make -C $(LIBFT_PATH) clean
 	$(RM) $(OBJ)

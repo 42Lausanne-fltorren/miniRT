@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2024/10/15 12:57:23 by fltorren         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:06:45 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,14 +211,6 @@ void				set_pixel(t_scene *scene, int x, int y, int color);
 
 void				add_light(t_scene *scene, t_generic_light light);
 void				add_object(t_scene *scene, t_generic_object object);
-
-int					parse(int fd, t_scene *scene);
-t_generic_light		parse_ambient_light(char *line, int *i);
-t_generic_light		parse_point_light(char *line, int *i);
-t_generic_object	parse_sphere(char *line, int *i);
-t_generic_object	parse_plane(char *line, int *i);
-t_generic_object	parse_cylinder(char *line, int *i);
-t_camera			parse_camera(char *line, int *i);
 
 t_identifier		get_identifier(char *line, int *i);
 double				get_double(char *line, int *i);
