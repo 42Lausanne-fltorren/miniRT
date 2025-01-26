@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tgajdov <tgajdov@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2025/01/08 14:08:24 by fltorren         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:16:06 by tgajdov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	main(int argc, char **argv)
 		return (ft_error());
 	init_scene(&scene);
 	// CALL THE PARSER HERE TO FILL THE SCENE STRUCTURE
+	parser(fd, &scene);
 	close(fd);
 	scene.mlx = mlx_init();
 	scene.win = mlx_new_window(scene.mlx, scene.width, scene.height,
