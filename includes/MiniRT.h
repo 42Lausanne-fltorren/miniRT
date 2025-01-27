@@ -117,7 +117,8 @@ typedef struct s_generic_object
 
 	double			(*intersect)(t_vec3 pos, t_vec3 dir,
 			struct s_generic_object this);
-	t_vec3 (*normal)(t_vec3 p, struct s_generic_object this);
+	struct s_vec3	(*normal)(t_vec3 p,
+			struct s_generic_object this);
 	t_object_type	type;
 	union
 	{
