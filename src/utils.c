@@ -45,7 +45,7 @@ void	error(char *message)
 
 void	expect(char *line, int i, char c)
 {
-	if (line[i] != '\0')
+	if (line[i] == '\0')
 		error("Unexpected EOF");
 	if (line[i] != c)
 		error("Expected character not found");
