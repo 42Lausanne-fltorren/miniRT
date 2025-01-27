@@ -21,7 +21,7 @@ double	get_double(char *line, int *i)
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	if (line[*i] == '\0' || (!ft_isdigit(line[*i]) && line[*i] != '-'))
-		error();
+		error("Invalid double");
 	a = ft_atoi(line + *i);
 	while (line[*i] && (ft_isdigit(line[*i]) || line[*i] == '-'))
 		(*i)++;
@@ -82,7 +82,7 @@ int	get_int(char *line, int *i)
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	if (line[*i] == '\0' || (!ft_isdigit(line[*i]) && line[*i] != '-'))
-		error();
+		error("Invalid integer");
 	a = ft_atoi(line + *i);
 	while (line[*i] && ft_isdigit(line[*i]))
 		(*i)++;

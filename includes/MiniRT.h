@@ -226,6 +226,6 @@ t_generic_object	parse_plane(char *line, int *i);
 t_generic_object	parse_cylinder(char *line, int *i);
 t_camera			parse_camera(char *line, int *i);
 
-void				error(void);
+void				error(char *message);
 void				expect(char *line, int i, char c);
 #endif

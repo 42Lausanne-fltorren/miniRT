@@ -36,7 +36,7 @@ t_identifier	get_identifier(const char *line, int *i)
 	while (++j < 6)
 		if (ft_strncmp(object_type, types[j], 2) == 0)
 			return (identifier_tab[j]);
-	error();
+	error("Invalid identifier");
 	return (I_NONE);
 }
 

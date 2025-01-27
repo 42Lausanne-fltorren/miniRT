@@ -35,14 +35,18 @@ double	min_2(double a, double b)
 	return (a);
 }
 
-void	error(void)
+void	error(char *message)
 {
 	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(message, 2);
+	ft_putchar_fd('\n', 2);
 	exit(1);
 }
 
 void	expect(char *line, int i, char c)
 {
-	if (line[i] != c && line[i] != '\0')
-		error();
+	if (line[i] != '\0')
+		error("Unexpected EOF");
+	if (line[i] != c)
+		error("Expected character not found");
 }
