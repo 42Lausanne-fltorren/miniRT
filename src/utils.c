@@ -34,3 +34,15 @@ double	min_2(double a, double b)
 		return (b);
 	return (a);
 }
+
+void	error(void)
+{
+	ft_putstr_fd("Error\n", 2);
+	exit(1);
+}
+
+void	expect(char *line, int i, char c)
+{
+	if (line[i] != c && line[i] != '\0')
+		error();
+}

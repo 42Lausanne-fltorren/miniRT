@@ -20,6 +20,8 @@ double	get_double(char *line, int *i)
 
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
+	if (line[*i] == '\0' || (!ft_isdigit(line[*i]) && line[*i] != '-'))
+		error();
 	a = ft_atoi(line + *i);
 	while (line[*i] && (ft_isdigit(line[*i]) || line[*i] == '-'))
 		(*i)++;
@@ -46,9 +48,11 @@ t_color	get_color(char *line, int *i)
 	color.r = get_double(line, i);
 	while (line[*i] && (ft_isspace(line[*i]) || line[*i] == ','))
 		(*i)++;
+	expect(line, (*i) - 1, ',');
 	color.g = get_double(line, i);
 	while (line[*i] && (ft_isspace(line[*i]) || line[*i] == ','))
 		(*i)++;
+	expect(line, (*i) - 1, ',');
 	color.b = get_double(line, i);
 	return (color);
 }
@@ -62,9 +66,11 @@ t_vec3	get_vec3(char *line, int *i)
 	vec.x = get_double(line, i);
 	while (line[*i] && (ft_isspace(line[*i]) || line[*i] == ','))
 		(*i)++;
+	expect(line, *i - 1, ',');
 	vec.y = get_double(line, i);
 	while (line[*i] && (ft_isspace(line[*i]) || line[*i] == ','))
 		(*i)++;
+	expect(line, *i - 1, ',');
 	vec.z = get_double(line, i);
 	return (vec);
 }
@@ -75,6 +81,8 @@ int	get_int(char *line, int *i)
 
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
+	if (line[*i] == '\0' || (!ft_isdigit(line[*i]) && line[*i] != '-'))
+		error();
 	a = ft_atoi(line + *i);
 	while (line[*i] && ft_isdigit(line[*i]))
 		(*i)++;

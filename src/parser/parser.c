@@ -34,10 +34,9 @@ t_identifier	get_identifier(const char *line, int *i)
 	object_type[1] = line[(*i)++];
 	j = -1;
 	while (++j < 6)
-	{
 		if (ft_strncmp(object_type, types[j], 2) == 0)
 			return (identifier_tab[j]);
-	}
+	error();
 	return (I_NONE);
 }
 
