@@ -6,7 +6,7 @@
 /*   By: tgajdov <tgajdov@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:21:56 by tgajdov           #+#    #+#             */
-/*   Updated: 2025/01/16 10:54:56 by tgajdov          ###   ########.fr       */
+/*   Updated: 2025/01/27 10:43:14 by tgajdov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ double	get_double(char *line, int *i)
 	double	a;
 	double	b;
 	int		j;
-	
+
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	a = ft_atoi(line + *i);
@@ -40,7 +40,7 @@ double	get_double(char *line, int *i)
 t_color	get_color(char *line, int *i)
 {
 	t_color	color;
-	
+
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	color.r = get_double(line, i);
@@ -56,6 +56,7 @@ t_color	get_color(char *line, int *i)
 t_vec3	get_vec3(char *line, int *i)
 {
 	t_vec3	vec;
+
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	vec.x = get_double(line, i);
@@ -71,6 +72,7 @@ t_vec3	get_vec3(char *line, int *i)
 int	get_int(char *line, int *i)
 {
 	int	a;
+
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	a = ft_atoi(line + *i);

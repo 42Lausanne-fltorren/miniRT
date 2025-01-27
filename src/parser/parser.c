@@ -6,7 +6,7 @@
 /*   By: tgajdov <tgajdov@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 22:51:06 by tgajdov           #+#    #+#             */
-/*   Updated: 2025/01/24 10:25:19 by tgajdov          ###   ########.fr       */
+/*   Updated: 2025/01/27 10:43:55 by tgajdov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ t_identifier	get_identifier(const char *line, int *i)
 	return (I_NONE);
 }
 
-int parser(int fd, t_scene *scene)
+int	parser(int fd, t_scene *scene)
 {
 	char			*line;
 	int				i;
 	t_identifier	identifier;
 
 	line = get_next_line(fd);
-	while(line)
+	while (line)
 	{
 		identifier = get_identifier(line, &i);
 		if (identifier == I_AMBIENT_LIGHT)

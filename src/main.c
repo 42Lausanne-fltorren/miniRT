@@ -6,7 +6,7 @@
 /*   By: tgajdov <tgajdov@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 11:12:40 by fltorren          #+#    #+#             */
-/*   Updated: 2025/01/24 10:16:06 by tgajdov          ###   ########.fr       */
+/*   Updated: 2025/01/27 10:45:31 by tgajdov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	main(int argc, char **argv)
 	if (fd < 0)
 		return (ft_error());
 	init_scene(&scene);
-	// CALL THE PARSER HERE TO FILL THE SCENE STRUCTURE
 	parser(fd, &scene);
 	close(fd);
 	scene.mlx = mlx_init();
