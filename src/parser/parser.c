@@ -6,7 +6,7 @@
 /*   By: tgajdov <tgajdov@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 22:51:06 by tgajdov           #+#    #+#             */
-/*   Updated: 2025/01/27 10:43:55 by tgajdov          ###   ########.fr       */
+/*   Updated: 2025/01/27 10:51:29 by tgajdov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,14 @@ t_identifier	get_identifier(const char *line, int *i)
 	int				j;
 	char			object_type[2];
 	const char		*types[] = {"A ", "C ", "L ", "sp", "pl", "cy"};
-	t_identifier	identifier_tab[] = {I_AMBIENT_LIGHT, I_CAMERA, I_POINT_LIGHT, I_SPHERE, I_PLANE, I_CYLINDER};
+	t_identifier	identifier_tab[6];
 
+	identifier_tab[0] = I_AMBIENT_LIGHT;
+	identifier_tab[1] = I_CAMERA;
+	identifier_tab[2] = I_POINT_LIGHT;
+	identifier_tab[3] = I_SPHERE;
+	identifier_tab[4] = I_PLANE;
+	identifier_tab[5] = I_CYLINDER;
 	*i = 0;
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
@@ -26,12 +32,11 @@ t_identifier	get_identifier(const char *line, int *i)
 		return (I_NONE);
 	object_type[0] = line[(*i)++];
 	object_type[1] = line[(*i)++];
-	j = 0;
-	while (j < 6)
+	j = -1;
+	while (++j < 6)
 	{
 		if (ft_strncmp(object_type, types[j], 2) == 0)
 			return (identifier_tab[j]);
-		j++;
 	}
 	return (I_NONE);
 }
