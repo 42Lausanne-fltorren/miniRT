@@ -8,6 +8,8 @@ INCLUDE = -Isrc -lm
 LIBFT_PATH = libft
 LIBFT = $(LIBFT_PATH)/libft.a
 
+MLX	= mlx_linux/libmlx_Linux.a
+
 NAME = miniRT
 
 all: $(NAME)
@@ -16,7 +18,7 @@ $(LIBFT):
 	make -C $(LIBFT_PATH) bonus
 
 $(MLX):
-	cd mlx_linux && ./configure
+	cd mlx_linux && ./configure && make
 
 %.o: %.c
 	$(CC) -Wall -Wextra -Werror -g -I/usr/include -Imlx_linux -c $< -o $@
