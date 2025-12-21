@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/MiniRT.h"
+#include <sys/time.h>
 
 int	close_hook(t_scene *data)
 {
@@ -43,8 +44,11 @@ int	ft_error(void)
 
 int	main(int argc, char **argv)
 {
-	int		fd;
-	t_scene	scene;
+	int				fd;
+	t_scene			scene;
+	struct timeval	start;
+	struct timeval	end;
+	long			elapsed_ms;
 
 	if (argc != 2)
 		return (ft_error());
@@ -58,8 +62,13 @@ int	main(int argc, char **argv)
 	scene.win = mlx_new_window(scene.mlx, scene.width, scene.height,
 			"xXMiniRTXx");
 	scene.img = mlx_new_image(scene.mlx, scene.width, scene.height);
+	gettimeofday(&start, NULL);
 	draw_scene(&scene);
 	mlx_put_image_to_window(scene.mlx, scene.win, scene.img, 0, 0);
+	gettimeofday(&end, NULL);
+	elapsed_ms = (end.tv_sec - start.tv_sec) * 1000
+		+ (end.tv_usec - start.tv_usec) / 1000;
+	printf("Render time: %ld ms\n", elapsed_ms);
 	mlx_key_hook(scene.win, key_hook, &scene);
 	mlx_hook(scene.win, 17, 1L << 19, close_hook, &scene);
 	mlx_loop(scene.mlx);
