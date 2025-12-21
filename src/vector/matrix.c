@@ -12,23 +12,50 @@
 
 #include "../../includes/MiniRT.h"
 
+static t_3x3_matrix	identity_matrix(double sign)
+{
+	t_3x3_matrix	m;
+
+	m.m[0][0] = 1;
+	m.m[0][1] = 0;
+	m.m[0][2] = 0;
+	m.m[1][0] = 0;
+	m.m[1][1] = 1;
+	m.m[1][2] = 0;
+	m.m[2][0] = 0;
+	m.m[2][1] = 0;
+	m.m[2][2] = sign;
+	return (m);
+}
+
 t_3x3_matrix	rotation_matrix(t_vec3 rot)
 {
-	t_vec3			u;
-	double			teta;
+	t_vec3			k;
+	double			c;
+	double			s;
+	double			klen;
 	t_3x3_matrix	matrix;
 
-	u = vec3_normalize(vec3_add(rot, vec3(0, 0, 1)));
-	teta = acos(vec3_dot(rot, vec3(1, 0, 1)) / vec3_len(rot));
-	matrix.m[0][0] = cos(teta) + u.x * u.x * (1 - cos(teta));
-	matrix.m[0][1] = u.x * u.y * (1 - cos(teta)) + u.z * sin(teta);
-	matrix.m[0][2] = u.x * u.z * (1 - cos(teta)) - u.y * sin(teta);
-	matrix.m[1][0] = u.y * u.x * (1 - cos(teta)) - u.z * sin(teta);
-	matrix.m[1][1] = cos(teta) + u.y * u.y * (1 - cos(teta));
-	matrix.m[1][2] = u.y * u.z * (1 - cos(teta)) + u.x * sin(teta);
-	matrix.m[2][0] = u.z * u.x * (1 - cos(teta)) + u.y * sin(teta);
-	matrix.m[2][1] = u.z * u.y * (1 - cos(teta)) - u.x * sin(teta);
-	matrix.m[2][2] = cos(teta) + u.z * u.z * (1 - cos(teta));
+	rot = vec3_normalize(rot);
+	c = rot.z;
+	k.x = -rot.y;
+	k.y = rot.x;
+	k.z = 0;
+	klen = sqrt(k.x * k.x + k.y * k.y);
+	if (klen < 0.0001)
+		return (identity_matrix((c > 0) ? 1 : -1));
+	k.x /= klen;
+	k.y /= klen;
+	s = klen;
+	matrix.m[0][0] = c + k.x * k.x * (1 - c);
+	matrix.m[0][1] = k.x * k.y * (1 - c);
+	matrix.m[0][2] = k.y * s;
+	matrix.m[1][0] = k.x * k.y * (1 - c);
+	matrix.m[1][1] = c + k.y * k.y * (1 - c);
+	matrix.m[1][2] = -k.x * s;
+	matrix.m[2][0] = -k.y * s;
+	matrix.m[2][1] = k.x * s;
+	matrix.m[2][2] = c;
 	return (matrix);
 }
 

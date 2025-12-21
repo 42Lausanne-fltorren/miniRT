@@ -39,6 +39,7 @@ void	draw_scene(t_scene *scene)
 	int		x;
 	int		y;
 	t_vec3	dir;
+
 	t_color	col;
 
 	x = -scene->width / 2;
@@ -49,7 +50,7 @@ void	draw_scene(t_scene *scene)
 		{
 			dir = vec3_rotate(canvas_to_viewport(x, y, scene),
 					scene->camera.dir);
-			col = trace_ray(scene->camera.pos, dir, scene, 5);
+			col = trace_ray(scene->camera.pos, dir, scene, 3);
 			set_pixel(scene, scene->width / 2 + x, scene->height / 2 - y,
 				color_to_int(col));
 			y++;
